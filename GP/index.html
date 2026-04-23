@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GP — Solar Desalination</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#060a14;color:#e2e8f0;font-family:'Segoe UI',sans-serif;overflow-x:hidden}
+:root{--blue:#38bdf8;--orange:#f97316;--green:#22c55e;--gold:#fbbf24;--red:#ef4444;--card:#0d1424;--border:#1e293b}
+
+/* ── HERO ── */
+.hero{padding:4rem 2rem 2rem;text-align:center;background:linear-gradient(180deg,#060a14,#0a0f1e);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,#38bdf812,transparent)}
+.hero-label{font-size:.65rem;letter-spacing:4px;color:var(--orange);margin-bottom:.8rem}
+.hero h1{font-size:clamp(1.1rem,2.5vw,1.8rem);font-weight:800;line-height:1.3;max-width:780px;margin:0 auto .8rem;background:linear-gradient(135deg,#e2e8f0,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-meta{color:#64748b;font-size:.78rem;margin-bottom:.4rem}
+.hero-badges{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:1.2rem}
+.badge{background:#38bdf810;border:1px solid #38bdf830;color:var(--blue);font-size:.65rem;padding:.25rem .7rem;border-radius:999px;letter-spacing:1px}
+
+/* ── SECTIONS ── */
+.sec{max-width:1000px;margin:0 auto;padding:2.5rem 1.5rem}
+.sec-label{font-size:.62rem;letter-spacing:3px;color:var(--orange);margin-bottom:.3rem}
+.sec-title{font-size:1.2rem;font-weight:700;margin-bottom:1.2rem}
+.divider{height:1px;background:linear-gradient(90deg,transparent,#1e293b,transparent);margin:1rem 0 2.5rem}
+
+/* ── PROBLEM CARDS ── */
+.prob-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem}
+.prob-card{background:var(--card);border:1px solid #ef444430;border-radius:12px;padding:1.2rem;position:relative;overflow:hidden}
+.prob-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--red)}
+.prob-icon{font-size:1.4rem;margin-bottom:.5rem}
+.prob-title{font-size:.82rem;font-weight:700;color:#ef4444;margin-bottom:.4rem}
+.prob-text{font-size:.75rem;color:#64748b;line-height:1.5}
+
+/* ── CONSTRAINT TRACKER ── */
+.constraint-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem}
+.constraint-title{font-size:.72rem;font-weight:700;color:#94a3b8;letter-spacing:2px;margin-bottom:1rem}
+.c-row{display:flex;align-items:center;gap:.8rem;margin-bottom:.7rem}
+.c-id{font-size:.65rem;color:var(--blue);background:#38bdf810;border:1px solid #38bdf830;padding:.15rem .5rem;border-radius:4px;flex-shrink:0;width:36px;text-align:center}
+.c-name{font-size:.75rem;color:#94a3b8;flex:1}
+.c-target{font-size:.72rem;color:#64748b;width:120px;text-align:right;flex-shrink:0}
+.c-status{font-size:.65rem;font-weight:700;width:60px;text-align:center;padding:.15rem .4rem;border-radius:4px;flex-shrink:0}
+.c-status.met{background:#22c55e20;color:var(--green);border:1px solid #22c55e40}
+.c-status.notmet{background:#ef444420;color:var(--red);border:1px solid #ef444440}
+.c-bar-wrap{width:80px;height:5px;background:#1e293b;border-radius:999px;overflow:hidden;flex-shrink:0}
+.c-bar-fill{height:100%;border-radius:999px;transition:width 1.5s ease}
+
+/* ── JOURNEY CHART ── */
+.journey-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem}
+.journey-title{font-size:.72rem;font-weight:700;color:#94a3b8;letter-spacing:2px;margin-bottom:1.5rem}
+.journey-bars{display:flex;align-items:flex-end;gap:.6rem;height:200px;padding-bottom:.5rem;position:relative}
+.j-group{display:flex;flex-direction:column;align-items:center;flex:1}
+.j-bar{width:100%;border-radius:6px 6px 0 0;transition:height 1.5s cubic-bezier(.4,0,.2,1);position:relative;min-height:4px;cursor:pointer}
+.j-bar:hover .j-tooltip{opacity:1;transform:translateY(-4px)}
+.j-tooltip{position:absolute;top:-52px;left:50%;transform:translateX(-50%);background:#1e293b;border:1px solid #334155;border-radius:6px;padding:.4rem .6rem;font-size:.65rem;color:#e2e8f0;white-space:nowrap;opacity:0;transition:.2s;pointer-events:none;z-index:10}
+.j-tooltip::after{content:'';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);width:8px;height:5px;background:#1e293b;clip-path:polygon(0 0,100% 0,50% 100%)}
+.j-val{font-size:.8rem;font-weight:700;margin-bottom:.3rem;color:#fff}
+.j-label{font-size:.62rem;color:#64748b;text-align:center;line-height:1.3;margin-top:.3rem}
+.j-arrow{display:flex;align-items:center;color:#334155;font-size:.8rem;padding-bottom:20px}
+.target-dashed{position:absolute;left:0;right:0;border-top:2px dashed #22c55e50;pointer-events:none}
+.target-tag{position:absolute;right:0;background:var(--card);font-size:.6rem;color:var(--green);padding:0 4px;top:-8px}
+
+/* ── INTERACTIVE COMPONENTS ── */
+.comp-section{margin-bottom:1.5rem}
+.comp-intro{font-size:.8rem;color:#64748b;margin-bottom:1.2rem;line-height:1.6}
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.8rem;margin-bottom:1.2rem}
+.comp-btn{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:1rem .8rem;text-align:center;cursor:pointer;transition:.3s;position:relative}
+.comp-btn:hover{border-color:#38bdf850;transform:translateY(-2px)}
+.comp-btn.active{border-color:var(--blue);background:#38bdf808}
+.comp-btn.active .comp-icon{transform:scale(1.15)}
+.comp-icon{font-size:1.6rem;margin-bottom:.4rem;display:block;transition:.3s}
+.comp-name{font-size:.72rem;font-weight:700;margin-bottom:.2rem}
+.comp-tag{font-size:.62rem;color:#64748b}
+.comp-panel{background:var(--card);border:1px solid #38bdf830;border-radius:12px;padding:1.2rem;min-height:110px;transition:.3s;display:none}
+.comp-panel.show{display:block}
+.comp-panel-title{font-size:.85rem;font-weight:700;color:var(--blue);margin-bottom:.6rem}
+.comp-panel-body{font-size:.78rem;color:#94a3b8;line-height:1.6;margin-bottom:.8rem}
+.comp-gain{display:inline-flex;align-items:center;gap:.5rem;background:#22c55e15;border:1px solid #22c55e30;border-radius:8px;padding:.4rem .8rem;font-size:.75rem;color:var(--green);font-weight:700}
+.comp-gain-before{display:inline-flex;align-items:center;gap:.5rem;background:#ef444415;border:1px solid #ef444430;border-radius:8px;padding:.4rem .8rem;font-size:.75rem;color:var(--red);font-weight:700;margin-right:.5rem}
+
+/* ── GEOMETRY ── */
+.geo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.geo-card{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:1.2rem;text-align:center;transition:.4s;position:relative}
+.geo-card.winner{border-color:var(--orange);background:linear-gradient(135deg,#0d1424,#150e04)}
+.geo-win-badge{position:absolute;top:.5rem;right:.5rem;background:var(--orange);color:#000;font-size:.55rem;font-weight:800;padding:.15rem .45rem;border-radius:3px;letter-spacing:1px}
+.geo-name{font-size:.85rem;font-weight:700;margin:.5rem 0 .2rem}
+.geo-card.winner .geo-name{color:var(--orange)}
+.geo-stat{font-size:.7rem;color:#64748b;margin-bottom:.15rem}
+.geo-stat span{color:var(--blue);font-weight:700}
+.geo-card.winner .geo-stat span{color:var(--orange)}
+
+/* ── FEA ── */
+.fea-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.fea-card{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:1.2rem;text-align:center;position:relative;transition:.3s}
+.fea-card.sel{border-color:var(--green);background:linear-gradient(135deg,#0d1424,#041208)}
+.fea-sel-badge{position:absolute;top:.5rem;right:.5rem;background:var(--green);color:#000;font-size:.55rem;font-weight:800;padding:.15rem .45rem;border-radius:3px}
+.fea-mm{font-size:1.8rem;font-weight:800;color:var(--blue);margin-bottom:.3rem}
+.fea-card.sel .fea-mm{color:var(--green)}
+.fea-row{font-size:.72rem;color:#64748b;margin-bottom:.2rem}
+.fea-row span{color:var(--blue);font-weight:600}
+.fea-card.sel .fea-row span{color:var(--green)}
+.fea-verdict{font-size:.68rem;margin-top:.5rem;color:#475569}
+.fea-card.sel .fea-verdict{color:var(--green)}
+.stress-bar{height:5px;background:#1e293b;border-radius:999px;overflow:hidden;margin:.5rem 0}
+.stress-fill{height:100%;border-radius:999px}
+
+/* ── LIT CHART ── */
+.lit-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem}
+.lit-head{font-size:.72rem;font-weight:700;color:#94a3b8;letter-spacing:2px;margin-bottom:1.2rem}
+.lit-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem}
+.lit-rank{font-size:.62rem;color:#475569;width:14px;flex-shrink:0;text-align:right}
+.lit-name{font-size:.67rem;color:#64748b;width:150px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lit-bar-wrap{flex:1;height:20px;background:#0a0f1e;border-radius:4px;overflow:hidden}
+.lit-bar{height:100%;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:5px;font-size:.62rem;font-weight:700;color:#fff;transition:width 1.8s cubic-bezier(.4,0,.2,1);width:0}
+.lit-bar.mine{background:linear-gradient(90deg,#f97316,#fbbf24);box-shadow:0 0 10px #f9731650}
+.lit-bar.other{background:linear-gradient(90deg,#1e3a5f,#334155)}
+.lit-bar.mine2{background:linear-gradient(90deg,#1e3a5f,#38bdf840)}
+
+/* ── IMAGES ── */
+.img-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;margin-bottom:1.5rem}
+.img-card{border-radius:10px;overflow:hidden;border:2px solid var(--border);cursor:pointer;transition:.3s;aspect-ratio:4/3;background:#0a0f1e;position:relative;display:flex;align-items:center;justify-content:center}
+.img-card:hover{border-color:var(--blue);transform:scale(1.03)}
+.img-card img{width:100%;height:100%;object-fit:cover}
+.img-card-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,#000c);font-size:.62rem;color:#94a3b8;padding:.3rem .5rem}
+.img-placeholder{text-align:center;padding:.8rem;color:#334155;font-size:.72rem}
+
+/* ── OUTCOME ── */
+.outcome-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem}
+.out-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;text-align:center;transition:.3s}
+.out-card:hover{border-color:#38bdf840;transform:translateY(-2px)}
+.out-val{font-size:1.6rem;font-weight:800;margin-bottom:.2rem}
+.out-label{font-size:.65rem;color:#64748b;letter-spacing:1px}
+
+/* ── LB ── */
+.lb{display:none;position:fixed;inset:0;background:#000000ee;z-index:9999;align-items:center;justify-content:center;padding:1.5rem}
+.lb.open{display:flex}
+.lb-inner{background:#0d1424;border:1px solid #1e293b;border-radius:14px;max-width:800px;width:100%;padding:1.4rem;position:relative;max-height:90vh;overflow-y:auto}
+.lb-close{position:absolute;top:.8rem;right:.8rem;background:#1e293b;border:none;color:#94a3b8;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.8rem}
+.lb-img{width:100%;border-radius:8px;max-height:420px;object-fit:contain}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.comp-panel.show{animation:fadeIn .3s ease}
+@media(max-width:600px){.geo-grid,.fea-grid{grid-template-columns:1fr}.lit-name{width:90px}.journey-bars{height:150px}}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">GRADUATION PROJECT · IMSIU · DECEMBER 2025</div>
+  <h1>Design of Hybrid Solar Powered Desalination System<br/>for Continuous Freshwater Production</h1>
+  <div class="hero-meta">Mechanical Engineering Department · Supervised by Dr. Chemseddine Ahmed Maatki</div>
+  <div class="hero-badges">
+    <span class="badge">COMSOL Multiphysics</span>
+    <span class="badge">SolidWorks FEA</span>
+    <span class="badge">CFD Optimization</span>
+    <span class="badge">GPI Multi-objective</span>
+    <span class="badge">Prototype Fabrication</span>
+    <span class="badge">Lab Testing</span>
+    <span class="badge">Vision 2030</span>
+  </div>
+</div>
+
+<!-- 1. PROBLEM -->
+<div class="sec">
+  <div class="sec-label">CHAPTER 1</div>
+  <div class="sec-title">Why this project? The problem with conventional solar stills</div>
+  <div class="prob-grid">
+    <div class="prob-card">
+      <div class="prob-icon">☀️</div>
+      <div class="prob-title">Daytime Only</div>
+      <div class="prob-text">Conventional stills stop producing at sunset — completely dependent on solar irradiance availability</div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-icon">📉</div>
+      <div class="prob-title">Low Productivity</div>
+      <div class="prob-text">Passive stills produce only ~5 kg/m²·day — far below what communities actually need</div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-icon">🌡️</div>
+      <div class="prob-title">Thermal Losses</div>
+      <div class="prob-text">High chamber humidity and weak convection limits evaporation rate and condensation efficiency</div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-icon">💧</div>
+      <div class="prob-title">Water Scarcity</div>
+      <div class="prob-text">Saudi Arabia faces critical freshwater shortages — sustainable low-cost solutions are urgently needed</div>
+    </div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- 2. CONSTRAINTS -->
+<div class="sec">
+  <div class="sec-label">CHAPTER 2 — DESIGN CONSTRAINTS</div>
+  <div class="sec-title">What the system had to achieve — before a single simulation ran</div>
+  <div class="constraint-box" id="cbox">
+    <div class="constraint-title">DESIGN SPECIFICATIONS — TABLE 1.3</div>
+    <!-- rows built by JS -->
+  </div>
+  <p style="font-size:.75rem;color:#475569;line-height:1.6">These constraints were defined <em>before</em> any simulation. Every design decision — geometry, glass thickness, hybrid configuration — was made to close the gap between the passive baseline and these targets.</p>
+</div>
+<div class="divider"></div>
+
+<!-- 3. JOURNEY -->
+<div class="sec">
+  <div class="sec-label">CHAPTER 3 — THE ENGINEERING JOURNEY</div>
+  <div class="sec-title">From 5.44 → 20.71 kg/m²·day — every step counted</div>
+  <div class="journey-wrap">
+    <div class="journey-title">PRODUCTIVITY PROGRESSION — SUMMER (kg/m²·day)</div>
+    <div class="journey-bars" id="jbars">
+      <!-- built by JS -->
+    </div>
+    <p style="font-size:.72rem;color:#475569;margin-top:.5rem;line-height:1.6">Each case added one engineering intervention. The gap to the 20 kg/m²·day target only closed when all subsystems worked together.</p>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- 4. INTERACTIVE COMPONENTS -->
+<div class="sec">
+  <div class="sec-label">CHAPTER 4 — SYSTEM COMPONENTS</div>
+  <div class="sec-title">Click each component to see what it contributed</div>
+  <div class="comp-intro">The hybrid system was built layer by layer. Each component solved a specific limitation of the passive still. Click to explore what each one added.</div>
+  <div class="comp-grid" id="comp-grid"></div>
+  <div class="comp-panel" id="comp-panel"></div>
+</div>
+<div class="divider"></div>
+
+<!-- 5. GEOMETRY -->
+<div class="sec">
+  <div class="sec-label">CHAPTER 5 — GEOMETRY OPTIMIZATION</div>
+  <div class="sec-title">How the V-shape was selected — using the Global Performance Index</div>
+  <p style="font-size:.78rem;color:#64748b;margin-bottom:1.2rem;line-height:1.6">Three geometries were simulated in COMSOL Multiphysics across Ra = 10³ to 10⁶. Performance was evaluated using GPI — a combined score of Nusselt number (heat transfer) and entropy generation (efficiency losses).</p>
+  <div class="geo-grid">
+    <div class="geo-card">
+      <svg width="90" height="70" viewBox="0 0 90 70"><defs><radialGradient id="p1" cx="50%" cy="70%" r="60%"><stop offset="0%" stop-color="#ef4444" stop-opacity=".7"/><stop offset="100%" stop-color="#3b82f6" stop-opacity=".4"/></radialGradient></defs><polygon points="45,4 85,66 5,66" fill="url(#p1)" opacity=".85"/><polygon points="45,4 85,66 5,66" fill="none" stroke="#38bdf8" stroke-width="1.2"/><ellipse cx="45" cy="48" rx="14" ry="9" fill="none" stroke="#000" stroke-width=".7" opacity=".4"/></svg>
+      <div class="geo-name">Pyramid</div>
+      <div class="geo-stat">Best GPI: <span>0.506</span> (L=0.7, Ra=10⁴)</div>
+      <div class="geo-stat">Strong at <span>large L</span> values</div>
+      <div class="geo-stat">Higher entropy at <span>small L</span></div>
+    </div>
+    <div class="geo-card winner">
+      <div class="geo-win-badge">SELECTED ✓</div>
+      <svg width="90" height="70" viewBox="0 0 90 70"><defs><radialGradient id="vl" cx="30%" cy="65%" r="45%"><stop offset="0%" stop-color="#ef4444" stop-opacity=".9"/><stop offset="100%" stop-color="#3b82f6" stop-opacity=".4"/></radialGradient><radialGradient id="vr" cx="70%" cy="65%" r="45%"><stop offset="0%" stop-color="#ef4444" stop-opacity=".9"/><stop offset="100%" stop-color="#3b82f6" stop-opacity=".4"/></radialGradient></defs><polygon points="5,66 27,8 45,40 63,8 85,66" fill="#1e293b" opacity=".3"/><polygon points="5,66 27,8 45,40 63,8 85,66" fill="none" stroke="#f97316" stroke-width="1.5"/><ellipse cx="22" cy="52" rx="12" ry="14" fill="url(#vl)" opacity=".85"/><ellipse cx="68" cy="52" rx="12" ry="14" fill="url(#vr)" opacity=".85"/></svg>
+      <div class="geo-name">V-Shape</div>
+      <div class="geo-stat">Best GPI: <span>0.560</span> (L=0.2, Ra=10⁶)</div>
+      <div class="geo-stat">Highest Nu at <span>moderate Ra</span></div>
+      <div class="geo-stat">Fabricated at <span>L=0.3</span> (2nd best)</div>
+    </div>
+    <div class="geo-card">
+      <svg width="90" height="70" viewBox="0 0 90 70"><defs><radialGradient id="c1" cx="50%" cy="60%" r="50%"><stop offset="0%" stop-color="#ef4444" stop-opacity=".7"/><stop offset="100%" stop-color="#3b82f6" stop-opacity=".4"/></radialGradient></defs><polygon points="45,2 64,66 26,66" fill="url(#c1)" opacity=".85"/><polygon points="45,2 64,66 26,66" fill="none" stroke="#38bdf8" stroke-width="1.2"/><ellipse cx="45" cy="48" rx="9" ry="8" fill="none" stroke="#000" stroke-width=".7" opacity=".4"/></svg>
+      <div class="geo-name">Chimney</div>
+      <div class="geo-stat">Best GPI: <span>0.437</span> (L=0.7, Ra=10⁴)</div>
+      <div class="geo-stat">Consistent but <span>lower Nu</span></div>
+      <div class="geo-stat">Less sensitive to <span>L changes</span></div>
+    </div>
+  </div>
+  <div style="background:var(--card);border:1px solid #38bdf820;border-radius:10px;padding:1rem;font-size:.75rem;color:#64748b;line-height:1.6">
+    ⚠️ <strong style="color:#94a3b8">Why L=0.3 and not L=0.2?</strong> The optimal GPI was at L=0.2 — but fabrication constraints (sealing difficulty, structural instability, workshop tool limitations) made it impractical. L=0.3 was the second-best manufacturable option and was used for the prototype.
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- 6. FEA -->
+<div class="sec">
+  <div class="sec-label">CHAPTER 6 — STRUCTURAL FEA</div>
+  <div class="sec-title">Glass thickness selection — SolidWorks Simulation</div>
+  <p style="font-size:.78rem;color:#64748b;margin-bottom:1.2rem;line-height:1.6">Three glass cover thicknesses were analyzed under gravity loading. The allowable von Mises stress limit was set at 8 MPa (CF5 constraint). All three passed — but 6mm offered the best balance.</p>
+  <div class="fea-grid">
+    <div class="fea-card">
+      <div class="fea-mm">4 mm</div>
+      <div class="fea-row">σᵥₘ max: <span>5.03 MPa</span></div>
+      <div class="fea-row">Reaction: <span>448.6 N</span></div>
+      <div class="fea-row">Strain: <span>3.15×10⁻⁵</span></div>
+      <div class="stress-bar"><div class="stress-fill" style="width:60%;background:linear-gradient(90deg,#22c55e,#38bdf8)"></div></div>
+      <div class="fea-verdict">✓ Safe but prone to edge chipping during fabrication</div>
+    </div>
+    <div class="fea-card sel">
+      <div class="fea-sel-badge">SELECTED</div>
+      <div class="fea-mm">6 mm</div>
+      <div class="fea-row">σᵥₘ max: <span>8.39 MPa</span></div>
+      <div class="fea-row">Reaction: <span>478.9 N</span></div>
+      <div class="fea-row">Strain: <span>1.90×10⁻⁴</span></div>
+      <div class="stress-bar"><div class="stress-fill" style="width:100%;background:linear-gradient(90deg,#22c55e,#16a34a)"></div></div>
+      <div class="fea-verdict">✓ Best balance — robust, manufacturable, within limit</div>
+    </div>
+    <div class="fea-card">
+      <div class="fea-mm">8 mm</div>
+      <div class="fea-row">σᵥₘ max: <span>8.37 MPa</span></div>
+      <div class="fea-row">Reaction: <span>520.1 N</span></div>
+      <div class="fea-row">Strain: <span>1.89×10⁻⁴</span></div>
+      <div class="stress-bar"><div class="stress-fill" style="width:100%;background:linear-gradient(90deg,#f97316,#ef4444)"></div></div>
+      <div class="fea-verdict">✓ Safe but overdesigned — unnecessary mass, no benefit over 6mm</div>
+    </div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- 7. LITERATURE -->
+<div class="sec">
+  <div class="sec-label">CHAPTER 7 — BENCHMARKING</div>
+  <div class="sec-title">How this project ranks against published research worldwide</div>
+  <div class="lit-wrap" id="lit-wrap">
+    <div class="lit-head">FRESHWATER PRODUCTIVITY (kg/m²·day) — GLOBAL LITERATURE COMPARISON</div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- 8. IMAGES -->
+<div class="sec">
+  <div class="sec-label">PROJECT GALLERY</div>
+  <div class="sec-title">Simulation results · Physical prototype · Lab testing</div>
+  <div class="img-grid">
+    <div class="img-card" onclick="openLB('sol1.jpg','Iso-temperature contours — Pyramid, V-shape, Chimney at Ra=10³ and Ra=10⁵')">
+      <img src="sol1.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+      <div class="img-placeholder" style="display:none">🌡<br/>Iso-temperature<br/>Contours<br/><span style="font-size:.6rem;color:#475569">sol1.jpg</span></div>
+      <div class="img-card-label">CFD — Iso-temperature Contours</div>
+    </div>
+    <div class="img-card" onclick="openLB('sol2.jpg','Streamlines — V-shape geometry showing dual convection vortices')">
+      <img src="sol2.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+      <div class="img-placeholder" style="display:none">💧<br/>CFD Streamlines<br/><span style="font-size:.6rem;color:#475569">sol2.jpg</span></div>
+      <div class="img-card-label">CFD — Streamlines V-shape</div>
+    </div>
+    <div class="img-card" onclick="openLB('sol3.jpg','Full hybrid system diagram — solar still, FPSC, CSP, PV, heat exchanger')">
+      <img src="sol3.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+      <div class="img-placeholder" style="display:none">⚙️<br/>System Diagram<br/><span style="font-size:.6rem;color:#475569">sol3.jpg</span></div>
+      <div class="img-card-label">Hybrid System Diagram</div>
+    </div>
+    <div class="img-card" onclick="openLB('sol4.jpg','SolidWorks FEA — structural verification of V-shape glass cover')">
+      <img src="sol4.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+      <div class="img-placeholder" style="display:none">🔩<br/>Structural FEA<br/><span style="font-size:.6rem;color:#475569">sol4.jpg</span></div>
+      <div class="img-card-label">SolidWorks FEA</div>
+    </div>
+    <div class="img-card" onclick="openLB('sol5.jpg','Physical prototype — V-shape solar still fabricated in Riyadh')">
+      <img src="sol5.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+      <div class="img-placeholder" style="display:none">🏗<br/>Physical Prototype<br/><span style="font-size:.6rem;color:#475569">sol5.jpg</span></div>
+      <div class="img-card-label">Physical Prototype</div>
+    </div>
+  </div>
+</div>
+
+<!-- OUTCOME -->
+<div class="sec">
+  <div class="sec-label">FINAL OUTCOME</div>
+  <div class="sec-title">All constraints met or exceeded</div>
+  <div class="outcome-grid" id="outcome-grid"></div>
+</div>
+
+<!-- LB -->
+<div class="lb" id="lb">
+  <div class="lb-inner">
+    <button class="lb-close" onclick="document.getElementById('lb').classList.remove('open')">✕</button>
+    <div style="font-size:.82rem;font-weight:700;margin-bottom:.8rem;padding-right:2rem;color:#e2e8f0" id="lb-ttl"></div>
+    <img class="lb-img" id="lb-img" src="" alt=""/>
+  </div>
+</div>
+
+<script>
+/* ── CONSTRAINTS ── */
+const constraints=[
+  {id:'MF1',name:'Summer productivity',target:'≥ 20.0 kg/m²·day',result:'20.71',met:true,pct:100},
+  {id:'MF2',name:'Winter productivity',target:'≥ 8.0 kg/m²·day',result:'8.64',met:true,pct:100},
+  {id:'MF3',name:'Improvement vs passive',target:'≥ 3.5×',result:'3.8×',met:true,pct:100},
+  {id:'MF4',name:'Night-time contribution',target:'≥ 70%',result:'74%',met:true,pct:100},
+  {id:'CF1',name:'Night ΔT (Tw−Tg)',target:'≥ 30°C',result:'37°C',met:true,pct:100},
+  {id:'CF2',name:'Thermal efficiency gain',target:'≥ 8%',result:'+8.7%',met:true,pct:100},
+  {id:'CF5',name:'Surface temp safety',target:'≤ 60°C',result:'< 60°C',met:true,pct:100},
+  {id:'CF7',name:'Prototype cost',target:'≤ 5500 SAR',result:'4742 SAR',met:true,pct:86},
+];
+const cb=document.getElementById('cbox');
+const inner=cb.querySelector('.constraint-title');
+constraints.forEach(c=>{
+  const row=document.createElement('div');
+  row.className='c-row';
+  row.innerHTML=`<div class="c-id">${c.id}</div>
+  <div class="c-name">${c.name}</div>
+  <div class="c-bar-wrap"><div class="c-bar-fill" data-pct="${c.pct}" style="width:0%;background:${c.met?'linear-gradient(90deg,#22c55e,#38bdf8)':'linear-gradient(90deg,#ef4444,#f97316)'}"></div></div>
+  <div class="c-target">${c.target} → <strong style="color:${c.met?'#22c55e':'#ef4444'}">${c.result}</strong></div>
+  <div class="c-status ${c.met?'met':'notmet'}">${c.met?'MET':'MISS'}</div>`;
+  cb.appendChild(row);
+});
+
+/* ── JOURNEY BARS ── */
+const jData=[
+  {label:'Passive\nφg=0.9',val:5.44,color:'#334155',tip:'Baseline — no enhancements\nφg=0.9, daytime only'},
+  {label:'+ Axial Fan\nCase A',val:6.11,color:'#1e4a6b',tip:'Added airflow circulation\nφg reduced to 0.6\n+12% improvement'},
+  {label:'+ Basin Heat\n+ Glass Cool\nCase B',val:19.47,color:'#1e5c8a',tip:'Heat exchanger heats basin\nGlass cooled actively\nNight operation enabled'},
+  {label:'+ CSP\nHot Air\nCase C',val:20.71,color:'#f97316',tip:'CSP injects hot air\nφg reduced to 0.45\nTarget MET ✓'},
+];
+const maxJ=22;const chartH=180;
+const jc=document.getElementById('jbars');
+jc.style.position='relative';
+// target line
+const tl=document.createElement('div');
+tl.style.cssText=`position:absolute;left:0;right:0;top:${chartH-Math.round(20/maxJ*chartH)}px;border-top:2px dashed #22c55e60;display:flex;align-items:center;justify-content:flex-end;padding-right:8px`;
+tl.innerHTML=`<span style="font-size:.6rem;color:#22c55e;background:#060a14;padding:0 4px">Target: 20 kg/m²·day</span>`;
+jc.appendChild(tl);
+
+jData.forEach((d,i)=>{
+  const h=Math.round(d.val/maxJ*chartH);
+  if(i>0){
+    const arr=document.createElement('div');
+    arr.className='j-arrow';arr.innerHTML='→';
+    jc.appendChild(arr);
+  }
+  const g=document.createElement('div');
+  g.className='j-group';
+  g.innerHTML=`<div class="j-bar" data-h="${h}" style="height:0px;background:${d.color};border:${d.color==='#f97316'?'2px solid #fbbf24':'1px solid #334155'}">
+    <div class="j-tooltip">${d.tip.replace(/\n/g,'<br/>')}</div>
+  </div>
+  <div class="j-val" style="color:${d.color==='#f97316'?'#fbbf24':'#94a3b8'}">${d.val}</div>
+  <div class="j-label" style="white-space:pre-line">${d.label}</div>`;
+  jc.appendChild(g);
+});
+
+/* ── COMPONENTS ── */
+const comps=[
+  {icon:'☀️',name:'Solar Still',tag:'Core unit',color:'#f97316',
+   title:'V-Shape Solar Still — The Core',
+   body:'The V-shape geometry was selected through GPI multi-objective optimization. Its steep inclined walls create strong natural convection vortices and maximize vapor contact with the condensing glass surface. Fabricated with 6mm tempered glass verified by FEA.',
+   before:'Passive: 5.44',after:'Baseline established',change:''},
+  {icon:'🔥',name:'Flat Plate\nCollector',tag:'FPSC — daytime heat',color:'#fbbf24',
+   title:'Flat Plate Solar Collector (FPSC)',
+   body:'Copper tube absorber preheats the feedwater before it enters the basin. Raises basin water temperature during daytime, extending the effective evaporation window into early evening. Directly increases Tw and the evaporative driving potential.',
+   before:'Day only',after:'Extended heating window',change:'Supports continuous day operation'},
+  {icon:'🌀',name:'CSP\nHot Air',tag:'Night operation',color:'#38bdf8',
+   title:'Concentrated Solar Power — Hot Air Injection',
+   body:'Parabolic trough concentrates solar radiation onto a receiver tube, heating air to high temperatures. This hot air is injected into the basin cavity, maintaining evaporation after sunset. This is the key innovation that enables 74% night-time productivity.',
+   before:'Night yield: 0',after:'Night yield: 15.27 kg/m²·night',change:'+15.27 kg/m²·night unlocked'},
+  {icon:'♻️',name:'Heat\nExchanger',tag:'Energy recovery',color:'#22c55e',
+   title:'Heat Exchanger — Energy Recovery Loop',
+   body:'Air-to-air compact heat exchanger recovers latent heat from moist exhaust air and returns it to the basin. Raises Tw from ambient to 65°C for summer night case. Without this, basin temperature would drop rapidly after sunset and production would stop.',
+   before:'Tw drops at night',after:'Tw maintained at 65°C',change:'Case B: total 19.47 kg/m²·day'},
+  {icon:'⚡',name:'PV Panel\n+ Pump',tag:'Autonomous operation',color:'#a78bfa',
+   title:'PV-Powered Auxiliary System',
+   body:'Photovoltaic panels supply electrical power to the circulation pump and axial fan. Enables fully autonomous off-grid operation — no external electricity needed. During lab testing, AC equivalents were used; field deployment uses PV-DC configuration.',
+   before:'Grid dependent',after:'100% solar autonomous',change:'Zero external energy input'},
+  {icon:'💨',name:'Axial Fan',tag:'Airflow control',color:'#94a3b8',
+   title:'Axial Fan — Chamber Humidity Control',
+   body:'Forces air circulation inside the chamber, reducing glass-side relative humidity from φg=0.9 to φg=0.6. This increases the vapor pressure difference across the evaporation-condensation interface. Simple intervention — but added 12% productivity over passive baseline.',
+   before:'φg = 0.9 (passive)',after:'φg = 0.6 (active)',change:'Case A: 5.44 → 6.11 kg/m²·day'},
+];
+const cg=document.getElementById('comp-grid');
+const cp=document.getElementById('comp-panel');
+comps.forEach((c,i)=>{
+  const btn=document.createElement('div');
+  btn.className='comp-btn';
+  btn.innerHTML=`<span class="comp-icon">${c.icon}</span>
+  <div class="comp-name" style="color:${c.color}">${c.name.replace(/\n/g,'<br/>')}</div>
+  <div class="comp-tag">${c.tag}</div>`;
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.comp-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    cp.innerHTML=`<div class="comp-panel-title" style="color:${c.color}">${c.icon} ${c.title}</div>
+    <div class="comp-panel-body">${c.body}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:.5rem;align-items:center">
+      ${c.before?`<div class="comp-gain-before">Before: ${c.before}</div>`:''}
+      ${c.after?`<div class="comp-gain">After: ${c.after}</div>`:''}
+      ${c.change?`<div style="font-size:.72rem;color:#64748b;margin-left:.3rem">→ ${c.change}</div>`:''}
+    </div>`;
+    cp.classList.add('show');
+  });
+  cg.appendChild(btn);
+});
+
+/* ── LITERATURE ── */
+const litData=[
+  {r:1,n:'This Work — Case C (V-type + CSP)',v:20.71,t:'mine'},
+  {r:2,n:'Isah et al. — HSDS combined',v:20.30,t:'other'},
+  {r:3,n:'Isah et al. — HSDS active',v:19.70,t:'other'},
+  {r:4,n:'Hoseinzadeh — CHeSS',v:12.17,t:'other'},
+  {r:5,n:'Benghanem — Hybrid IoT',v:12.00,t:'other'},
+  {r:6,n:'Immanual — SACSS',v:9.10,t:'other'},
+  {r:7,n:'Pacheco — Modular Pilot',v:6.24,t:'other'},
+  {r:8,n:'This Work — Case A (airflow)',v:6.11,t:'mine2'},
+  {r:9,n:'This Work — Passive baseline',v:5.44,t:'mine2'},
+  {r:10,n:'Isah et al. — HSDS passive',v:4.70,t:'other'},
+  {r:11,n:'Ellappan — CSS-SAH',v:4.70,t:'other'},
+  {r:12,n:'Saada — ISS',v:4.50,t:'other'},
+  {r:13,n:'Mevada — SSWESM',v:2.50,t:'other'},
+];
+const lw=document.getElementById('lit-wrap');
+litData.forEach(d=>{
+  const pct=(d.v/20.71*100).toFixed(1);
+  lw.innerHTML+=`<div class="lit-row">
+    <div class="lit-rank">${d.r}</div>
+    <div class="lit-name" title="${d.n}">${d.n}</div>
+    <div class="lit-bar-wrap"><div class="lit-bar ${d.t}" data-pct="${pct}" style="width:0">${d.v}</div></div>
+    ${d.r===1?'<span style="font-size:.9rem;margin-left:.3rem">🏆</span>':''}
+  </div>`;
+});
+
+/* ── OUTCOME ── */
+const outcomes=[
+  {val:'20.71',unit:'kg/m²·day',label:'Peak Productivity',color:'#fbbf24'},
+  {val:'74%',unit:'',label:'Night Contribution',color:'#38bdf8'},
+  {val:'3.8×',unit:'',label:'vs Passive Still',color:'#f97316'},
+  {val:'#1',unit:'',label:'in Literature',color:'#22c55e'},
+  {val:'8.64',unit:'kg/m²·day',label:'Winter Productivity',color:'#38bdf8'},
+  {val:'4742',unit:' SAR',label:'Total Prototype Cost',color:'#94a3b8'},
+];
+const og=document.getElementById('outcome-grid');
+outcomes.forEach(o=>{
+  og.innerHTML+=`<div class="out-card">
+    <div class="out-val" style="color:${o.color}">${o.val}<span style="font-size:.9rem">${o.unit}</span></div>
+    <div class="out-label">${o.label}</div>
+  </div>`;
+});
+
+/* ── ANIMATE ON SCROLL ── */
+let done=false;
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting&&!done){
+      done=true;
+      // constraint bars
+      document.querySelectorAll('.c-bar-fill').forEach(b=>{
+        setTimeout(()=>{b.style.width=b.dataset.pct+'%';},200);
+      });
+      // journey bars
+      document.querySelectorAll('.j-bar').forEach((b,i)=>{
+        setTimeout(()=>{b.style.height=b.dataset.h+'px';},i*200);
+      });
+      // lit bars
+      setTimeout(()=>{
+        document.querySelectorAll('.lit-bar').forEach(b=>{
+          b.style.width=b.dataset.pct+'%';
+        });
+      },400);
+    }
+  });
+},{threshold:.05});
+obs.observe(document.getElementById('cbox'));
+
+/* ── LB ── */
+function openLB(src,ttl){
+  document.getElementById('lb-img').src=src;
+  document.getElementById('lb-ttl').textContent=ttl;
+  document.getElementById('lb').classList.add('open');
+}
+document.getElementById('lb').addEventListener('click',e=>{
+  if(e.target===document.getElementById('lb'))
+    document.getElementById('lb').classList.remove('open');
+});
+</script>
+</body>
+</html>
