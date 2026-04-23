@@ -619,9 +619,7 @@ function openLightbox(p) {
   const content = document.getElementById('lb-content');
   content.innerHTML = '';
   if (!p.imgs || p.imgs.length === 0) {
-    content.innerHTML = `<div class="lb-no-img">No images linked yet for this project.<br/>
-    Open index.html, find the <strong>IMAGES</strong> object at the top of the script,
-    and replace the placeholder filenames with your actual image filenames.</div>`;
+    content.innerHTML = `<div class="lb-no-img">No images linked yet for this project.<br/>;
   } else {
     const main = document.createElement('img');
     main.className = 'lb-main-img';
