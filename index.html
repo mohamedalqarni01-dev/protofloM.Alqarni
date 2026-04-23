@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mohammed Alqarni — ME Portfolio</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#0a0e1a;color:#e2e8f0;min-height:100vh}
+:root{--blue:#38bdf8;--orange:#f97316;--green:#22c55e;--card:#111827;--border:#1e293b;--muted:#94a3b8}
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:#0a0e1aee;backdrop-filter:blur(8px);z-index:100}
+.logo{font-size:1.1rem;font-weight:700;color:var(--blue);letter-spacing:2px}
+.nav-links{display:flex;gap:2rem}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.85rem;letter-spacing:1px;transition:.2s}
+.nav-links a:hover{color:var(--blue)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.3rem}
+.hamburger span{display:block;width:22px;height:2px;background:var(--muted);border-radius:2px;transition:.3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none;flex-direction:column;gap:0;background:#111827;border-bottom:1px solid var(--border)}
+.mobile-menu a{color:var(--muted);text-decoration:none;font-size:.9rem;padding:.9rem 1.5rem;border-bottom:1px solid var(--border);transition:.2s}
+.mobile-menu a:hover{color:var(--blue);background:#38bdf808}
+.mobile-menu.open{display:flex}
+.hero{padding:5rem 3rem 3rem;max-width:900px;margin:0 auto;text-align:center}
+.hero-tag{display:inline-block;background:#38bdf815;border:1px solid #38bdf840;color:var(--blue);font-size:.75rem;letter-spacing:2px;padding:.4rem 1rem;border-radius:999px;margin-bottom:1.5rem}
+.hero h1{font-size:2.8rem;font-weight:800;line-height:1.1;margin-bottom:1rem}
+.hero h1 span{color:var(--blue)}
+.hero-tagline{color:var(--muted);font-size:1rem;max-width:620px;margin:0 auto .6rem;line-height:1.7}
+.hero-principle{display:inline-block;background:#f9731610;border:1px solid #f9731630;color:var(--orange);font-size:.78rem;padding:.35rem 1rem;border-radius:999px;margin-bottom:1.8rem;font-style:italic}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--blue);color:#0a0e1a;padding:.7rem 1.8rem;border-radius:8px;border:none;font-weight:700;font-size:.9rem;cursor:pointer;transition:.2s}
+.btn-primary:hover{background:#7dd3fc}
+.btn-outline{background:transparent;color:var(--blue);padding:.7rem 1.8rem;border-radius:8px;border:1px solid var(--blue);font-weight:600;font-size:.9rem;cursor:pointer;transition:.2s}
+.btn-outline:hover{background:#38bdf815}
+.tools-row{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;padding:1.5rem 3rem 2.5rem;max-width:1000px;margin:0 auto}
+.tool-badge{background:var(--card);border:1px solid var(--border);color:var(--blue);font-size:.75rem;letter-spacing:1px;padding:.35rem .9rem;border-radius:999px}
+section{padding:2.5rem 2rem;max-width:1100px;margin:0 auto}
+.section-title{font-size:.7rem;letter-spacing:3px;color:var(--orange);margin-bottom:.4rem}
+.section-heading{font-size:1.5rem;font-weight:700;margin-bottom:1.8rem}
+.software-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem}
+.sw-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;text-align:center}
+.sw-icon{font-size:1.4rem;margin-bottom:.5rem}
+.sw-name{font-size:.85rem;font-weight:700;margin-bottom:.25rem}
+.sw-cat{font-size:.72rem;color:var(--muted)}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+.skill-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.5rem}
+.skill-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem}
+.skill-name{font-size:.9rem;font-weight:600}
+.skill-pct{font-size:.78rem;color:var(--blue);font-weight:700;background:#38bdf810;border:1px solid #38bdf830;padding:.15rem .55rem;border-radius:999px;white-space:nowrap}
+.skill-bar{height:5px;background:#1e293b;border-radius:999px;overflow:hidden}
+.skill-fill{height:100%;border-radius:999px;background:var(--blue);transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.skill-sub{font-size:.75rem;color:var(--muted);margin-top:.5rem}
+.exp-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem 1.8rem;position:relative;overflow:hidden}
+.exp-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--blue),var(--orange))}
+.exp-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.3rem;flex-wrap:wrap;gap:.5rem}
+.exp-title{font-size:1rem;font-weight:700}
+.exp-date{font-size:.75rem;color:var(--blue);background:#38bdf810;border:1px solid #38bdf830;padding:.2rem .7rem;border-radius:999px}
+.exp-company{font-size:.85rem;color:var(--orange);margin-bottom:.9rem}
+.exp-list{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.exp-list li{font-size:.82rem;color:var(--muted);display:flex;gap:.7rem;line-height:1.55}
+.exp-list li::before{content:'▸';color:var(--blue);flex-shrink:0;margin-top:1px}
+.exp-insight{margin-top:1rem;padding:.8rem 1rem;background:#38bdf808;border:1px solid #38bdf825;border-radius:10px;font-size:.8rem;color:#7dd3fc;line-height:1.6;font-style:italic}
+.exp-insight strong{color:var(--blue);font-style:normal}
+.kpi-row{display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap}
+.kpi{background:#38bdf808;border:1px solid #38bdf825;border-radius:10px;padding:.6rem 1rem;text-align:center;flex:1;min-width:110px}
+.kpi-val{font-size:1.1rem;font-weight:800;color:var(--blue)}
+.kpi-label{font-size:.68rem;color:var(--muted);margin-top:.1rem}
+.ninety-day{margin-top:1.2rem;border-top:1px solid var(--border);padding-top:1rem}
+.ninety-title{font-size:.72rem;letter-spacing:2px;color:var(--orange);margin-bottom:.8rem}
+.ninety-steps{display:flex;align-items:flex-start;gap:.5rem;flex-wrap:wrap}
+.ninety-step{flex:1;min-width:130px;background:#38bdf808;border:1px solid #38bdf820;border-radius:10px;padding:.7rem .9rem}
+.ninety-label{font-size:.78rem;font-weight:700;color:var(--blue);margin-bottom:.3rem}
+.ninety-desc{font-size:.74rem;color:var(--muted);line-height:1.5}
+.ninety-divider{color:#334155;font-size:1rem;margin-top:1.1rem;flex-shrink:0}
+.exp-logo{width:36px;height:36px;object-fit:contain;border-radius:6px;border:1px solid var(--border);background:#fff;padding:3px;flex-shrink:0}
+.exp-logo-placeholder{width:36px;height:36px;border-radius:6px;border:1px dashed #38bdf840;background:#1e293b;display:flex;align-items:center;justify-content:center;font-size:.5rem;color:#475569;text-align:center;flex-shrink:0}
+.exp-header-row{display:flex;align-items:flex-start;gap:.8rem}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.about-profile{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.profile-avatar-wrap{position:relative;flex-shrink:0}
+.profile-avatar{width:62px;height:62px;border-radius:50%;object-fit:cover;border:2px solid var(--blue);flex-shrink:0;background:#1e293b;display:block}
+.profile-avatar-placeholder{width:62px;height:62px;border-radius:50%;background:#1e293b;border:2px dashed #38bdf860;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+.profile-name{font-size:.95rem;font-weight:700;margin-bottom:.2rem}
+.profile-title{font-size:.75rem;color:var(--muted)}
+.about-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.4rem}
+.about-card h3{font-size:.82rem;font-weight:700;margin-bottom:1rem;color:var(--orange);letter-spacing:1px}
+.about-list{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.about-list li{font-size:.8rem;color:var(--muted);display:flex;gap:.7rem;align-items:flex-start;line-height:1.5}
+.about-list li::before{content:'▸';color:var(--blue);flex-shrink:0;margin-top:1px}
+.contact-bar{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:2rem;text-align:center;margin:1.5rem 0}
+.contact-bar h2{font-size:1.2rem;font-weight:700;margin-bottom:.4rem}
+.contact-bar p{color:var(--muted);font-size:.88rem;margin-bottom:1.4rem}
+.contact-links{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.contact-link{background:#1e293b;color:var(--blue);padding:.6rem 1.4rem;border-radius:8px;text-decoration:none;font-size:.85rem;font-weight:600;border:1px solid var(--border);transition:.2s;cursor:pointer;display:inline-block}
+.contact-link:hover{border-color:var(--blue);background:#38bdf810}
+
+/* PROJECT CARDS */
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem}
+.proj-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:.25s;cursor:pointer}
+.proj-card:hover{border-color:#38bdf880;transform:translateY(-3px)}
+.proj-card.featured{border-color:#f9731650;background:#111820}
+.proj-card.featured:hover{border-color:var(--orange);transform:translateY(-3px)}
+.proj-visual{height:165px;display:flex;align-items:center;justify-content:center;background:#0a0f1e;padding:.8rem;position:relative}
+.click-hint{position:absolute;bottom:6px;right:10px;font-size:.65rem;color:#38bdf870;letter-spacing:1px}
+.proj-body{padding:1.1rem 1.3rem}
+.proj-tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem}
+.proj-tag{font-size:.7rem;padding:.2rem .6rem;border-radius:999px;border:1px solid}
+.proj-tag.blue{background:#38bdf810;color:var(--blue);border-color:#38bdf830}
+.proj-tag.orange{background:#f9731610;color:var(--orange);border-color:#f9731630}
+.proj-tag.green{background:#22c55e10;color:var(--green);border-color:#22c55e30}
+.proj-tag.gray{background:#ffffff08;color:#64748b;border-color:#334155}
+.proj-title{font-size:.95rem;font-weight:700;margin-bottom:.45rem}
+.proj-desc{font-size:.8rem;color:var(--muted);line-height:1.6;margin-bottom:.7rem}
+.proj-result{border-left:3px solid var(--blue);padding:.45rem .7rem;border-radius:0 6px 6px 0;font-size:.76rem;color:var(--blue);background:#38bdf808;margin-bottom:.6rem}
+.proj-judgment{border-left:3px solid var(--orange);padding:.45rem .7rem;border-radius:0 6px 6px 0;font-size:.76rem;color:#fb923c;background:#f9731608;margin-bottom:.6rem}
+.proj-judgment-label{font-size:.65rem;letter-spacing:1px;color:var(--orange);margin-bottom:.2rem;font-weight:700}
+.proj-link{display:inline-block;margin-top:.3rem;font-size:.78rem;color:var(--orange);text-decoration:none;border:1px solid #f9731640;padding:.3rem .8rem;border-radius:6px;background:#f9731608;transition:.2s}
+.proj-link:hover{background:#f9731618;border-color:var(--orange)}
+
+/* MORE WORK GALLERY */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem}
+.gallery-item{position:relative;border-radius:10px;overflow:hidden;background:#0a0f1e;border:1px solid var(--border);cursor:pointer;transition:.25s;aspect-ratio:4/3}
+.gallery-item:hover{border-color:#38bdf880;transform:translateY(-2px)}
+.gallery-item img{width:100%;height:100%;object-fit:cover;display:block;opacity:.85;transition:.2s}
+.gallery-item:hover img{opacity:1}
+.gallery-item .gallery-label{position:absolute;bottom:0;left:0;right:0;background:#0a0e1acc;padding:.4rem .6rem;font-size:.7rem;color:var(--muted);backdrop-filter:blur(4px)}
+
+/* LIGHTBOX */
+.lightbox{display:none;position:fixed;inset:0;background:#000000dd;z-index:999;align-items:center;justify-content:center;padding:1.5rem}
+.lightbox.open{display:flex}
+.lb-inner{background:#111827;border:1px solid #1e293b;border-radius:16px;max-width:820px;width:100%;max-height:90vh;overflow-y:auto;padding:1.5rem;position:relative}
+.lb-close{position:absolute;top:1rem;right:1rem;background:#1e293b;border:none;color:#94a3b8;font-size:1rem;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:10}
+.lb-close:hover{color:#fff;background:#334155}
+.lb-title{font-size:1rem;font-weight:700;margin-bottom:1rem;padding-right:2.5rem;color:#e2e8f0}
+.lb-main-img{width:100%;border-radius:10px;object-fit:contain;max-height:400px;background:#0a0f1e;display:block;border:1px solid #1e293b}
+.lb-thumbs{display:flex;gap:.6rem;margin-top:.8rem;overflow-x:auto;padding-bottom:.3rem}
+.lb-thumb{width:80px;height:56px;border-radius:7px;object-fit:cover;cursor:pointer;border:2px solid transparent;flex-shrink:0;transition:.2s;opacity:.65}
+.lb-thumb:hover,.lb-thumb.active{border-color:var(--blue);opacity:1}
+.lb-no-img{color:#475569;font-size:.82rem;padding:2rem;text-align:center;line-height:1.7}
+
+@media(max-width:640px){
+  nav{padding:1rem 1.2rem}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .hero{padding:3rem 1.2rem}
+  .hero h1{font-size:2rem}
+  section{padding:1.5rem 1rem}
+  .about-grid{grid-template-columns:1fr}
+  .kpi-row{gap:.6rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">⚙ M.ALQARNI</div>
+  <div class="nav-links">
+    <a href="#experience">Experience</a>
+    <a href="#software">Software</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#experience" onclick="closeMobileMenu()">Experience</a>
+  <a href="#software"   onclick="closeMobileMenu()">Software</a>
+  <a href="#skills"     onclick="closeMobileMenu()">Skills</a>
+  <a href="#projects"   onclick="closeMobileMenu()">Projects</a>
+  <a href="#about"      onclick="closeMobileMenu()">About</a>
+  <a href="#contact"    onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">MECHANICAL ENGINEER · FRESH GRADUATE</div>
+  <h1>Mohammed<br/><span>Alqarni</span></h1>
+  <p class="hero-tagline">I use simulation to test hypotheses — then I let the data challenge my assumptions. Mechanical engineer with hands-on industry experience in production systems, structural FEA, and CFD thermal analysis.</p>
+  <p class="hero-principle">"The best design isn't always the best-performing simulation — manufacturability and real-world constraints are part of the answer."</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="window.location.href='Mohammed_Alqarni_CV.pdf'">Download CV</button>
+    <button class="btn-outline" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">View Projects</button>
+  </div>
+</div>
+
+<!-- BADGES -->
+<div class="tools-row">
+  <span class="tool-badge">SolidWorks</span>
+  <span class="tool-badge">AutoCAD</span>
+  <span class="tool-badge">ANSYS Mechanical</span>
+  <span class="tool-badge">ANSYS Fluent</span>
+  <span class="tool-badge">ANSYS Workbench</span>
+  <span class="tool-badge">MATLAB</span>
+  <span class="tool-badge">Simulink</span>
+  <span class="tool-badge">EES</span>
+  <span class="tool-badge">HAP</span>
+  <span class="tool-badge">VBA</span>
+  <span class="tool-badge">GD&amp;T</span>
+  <span class="tool-badge">Kaizen / Lean</span>
+</div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-title">INDUSTRY</div>
+  <div class="section-heading">Work Experience</div>
+  <div class="exp-card">
+    <div class="exp-header-row">
+      <img src="Logo.jpg" alt="Unicharm" class="exp-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="exp-logo-placeholder" style="display:none">logo</div>
+      <div style="flex:1">
+        <div class="exp-header">
+          <div class="exp-title">Mechanical Engineer Intern – Production Department</div>
+          <div class="exp-date">Jan 2026 – May 2026</div>
+        </div>
+        <div class="exp-company">Unicharm Middle East &amp; Africa · Riyadh, Saudi Arabia</div>
+      </div>
+    </div>
+    <ul class="exp-list">
+      <li>Before touching anything, spent the first period systematically mapping the full production process — PLC logic sequences, operator workflows, hot melt pressure settings, and training gaps. What appeared as a single efficiency problem turned out to be four independent root causes stacked on each other.</li>
+      <li>Addressing all root causes together — rather than the most visible one — moved machine efficiency from 85% to 94% within two weeks and reduced process time by 30%.</li>
+      <li>Developed a conceptual FEA model in SolidWorks Simulation to analyze potential failure points and improve component reliability under real operating loads.</li>
+    </ul>
+    <div class="exp-insight">
+      <strong>The judgment call:</strong> The efficiency number was a symptom, not the problem. Mapping the system first — PLC behavior, operator training gaps, pressure inconsistencies — meant the fix addressed causes, not guesses. That's what made the result stick.
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">85→94%</div><div class="kpi-label">Machine Efficiency</div></div>
+      <div class="kpi"><div class="kpi-val">−30%</div><div class="kpi-label">Process Time</div></div>
+      <div class="kpi"><div class="kpi-val">4</div><div class="kpi-label">Root Causes Found</div></div>
+      <div class="kpi"><div class="kpi-val">2 weeks</div><div class="kpi-label">Time to Result</div></div>
+    </div>
+    <div class="ninety-day">
+      <div class="ninety-title">What I deliver in 90 days</div>
+      <div class="ninety-steps">
+        <div class="ninety-step">
+          <div class="ninety-label">Day 1–30</div>
+          <div class="ninety-desc">Observe systems, map processes, understand root causes — before proposing any fix</div>
+        </div>
+        <div class="ninety-divider">→</div>
+        <div class="ninety-step">
+          <div class="ninety-label">Day 31–60</div>
+          <div class="ninety-desc">Take ownership, execute targeted improvements across all identified causes</div>
+        </div>
+        <div class="ninety-divider">→</div>
+        <div class="ninety-step">
+          <div class="ninety-label">Day 61–90</div>
+          <div class="ninety-desc">Deliver measurable results, validate they hold, and document for the team</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOFTWARE -->
+<section id="software">
+  <div class="section-title">TOOLS &amp; PLATFORMS</div>
+  <div class="section-heading">Software Proficiency</div>
+  <div class="software-grid" id="sw-grid"></div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-title">CAPABILITIES</div>
+  <div class="section-heading">Technical Skills</div>
+  <div class="skills-grid" id="skills-grid"></div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-title">WORK</div>
+  <div class="section-heading">Featured Projects</div>
+  <div class="projects-grid" id="projects-grid"></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-title">PROFILE</div>
+  <div class="section-heading">About Me</div>
+  <div class="about-grid">
+    <div class="about-card">
+      <div class="about-profile">
+        <div class="profile-avatar-wrap">
+          <img src="profile.jpg" alt="Mohammed Alqarni" class="profile-avatar" onerror="this.style.display='none';document.getElementById('prof-placeholder').style.display='flex'"/>
+          <div class="profile-avatar-placeholder" id="prof-placeholder" style="display:none">👤</div>
+        </div>
+        <div>
+          <div class="profile-name">Mohammed Alqarni</div>
+          <div class="profile-title">Mechanical Engineer · Riyadh, Saudi Arabia</div>
+        </div>
+      </div>
+      <h3>Education</h3>
+      <ul class="about-list">
+        <li>B.Sc. Mechanical Engineering — Imam Muhammad ibn Saud Islamic University</li>
+        <li>Graduation Project: Multi-objective CFD optimization of solar still geometry — compared Pyramid, V-shape, and Chimney configurations using Nusselt number, entropy generation, and a Pugh matrix to select the best manufacturable design</li>
+        <li>Applied simulation tools throughout coursework to validate theoretical results</li>
+        <li>Key courses: Fluid Mechanics · Thermodynamics · Heat Transfer · Machine Design · FEM · Gas Dynamics · System Dynamics · Solar Energy</li>
+      </ul>
+    </div>
+    <div class="about-card">
+      <h3>Why hire a fresh graduate?</h3>
+      <ul class="about-list">
+        <li>Proven industry results — delivered measurable KPI improvements at Unicharm within two weeks</li>
+        <li>Simulation-first mindset — used ANSYS Fluent &amp; Mechanical across multiple real projects</li>
+        <li>Broad software toolkit: CAD, FEA, CFD, EES, HAP, VBA, MATLAB, Simulink</li>
+        <li>Fast learner — no bad habits, ready to contribute from day one</li>
+      </ul>
+    </div>
+    <div class="about-card">
+      <h3>Courses &amp; Specializations</h3>
+      <ul class="about-list">
+        <li>Gas Dynamics — C-D nozzle, Mach number, isentropic flow, normal shocks</li>
+        <li>System Dynamics Modeling — quarter-car model, Simulink, road input response</li>
+        <li>Solar Energy Systems — thermal performance, collector design, efficiency</li>
+        <li>Heat Transfer · Thermodynamics · Fluid Mechanics · Machine Design</li>
+      </ul>
+    </div>
+    <div class="about-card">
+      <h3>Languages &amp; Extras</h3>
+      <ul class="about-list">
+        <li>Arabic — native</li>
+        <li>English — professional working proficiency</li>
+        <li>SolidWorks CSWA — in progress</li>
+        <li>ANSYS Student Certification — Structural Analysis</li>
+        <li>Lean Manufacturing / Kaizen — applied in industry</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- MORE WORK GALLERY -->
+<section id="more-work">
+  <div class="section-title">ADDITIONAL WORK</div>
+  <div class="section-heading">More Projects</div>
+  <div class="gallery-grid" id="gallery-grid"></div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-bar">
+    <h2>Let's work together</h2>
+    <p>Open to full-time engineering roles, internships, and graduate training programs in Saudi Arabia and beyond.</p>
+    <div class="contact-links">
+      <a href="https://linkedin.com/in/mohammed-alqarni-48bb48311" target="_blank" class="contact-link">🔗 LinkedIn</a>
+      <a href="https://mail.google.com/mail/?view=cm&to=Mohamedalqarni01@gmail.com" target="_blank" class="contact-link">✉ Email Me</a>
+      <a href="https://wa.me/966535866543" target="_blank" class="contact-link">💬 WhatsApp</a>
+      <a href="Mohammed_Alqarni_CV.pdf" download class="contact-link">⬇ Download CV</a>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <div class="lb-inner">
+    <button class="lb-close" id="lb-close">✕</button>
+    <div class="lb-title" id="lb-title"></div>
+    <div id="lb-content"></div>
+  </div>
+</div>
+
+<script>
+const IMAGES = {
+  eng:     ['eng1.jpg','eng2.jpg','eng3.jpg'],
+  fea:     ['fea1.jpg','fea2.jpg','fea3.jpg','FEA4.jpg'],
+  sol:     ['sol1.jpg','sol2.jpg','sol3.jpg','sol4.jpg','sol5.jpg'],
+  nozzle:  ['gas1.jpg'],
+  suspend: ['suspend1.jpg','suspend2.jpg','suspend3.jpg'],
+  sysdyn:  ['spr1.jpg','spr2.jpg','spr3.jpg'],
+  solcol:  [],
+};
+
+const software = [
+  {icon:'📐', name:'SolidWorks',       cat:'CAD / 3D Modeling'},
+  {icon:'📏', name:'AutoCAD',          cat:'2D Drafting'},
+  {icon:'🔩', name:'ANSYS Mechanical', cat:'FEA / Structural'},
+  {icon:'💧', name:'ANSYS Fluent',     cat:'CFD / Thermal'},
+  {icon:'⚡', name:'MATLAB / Simulink',cat:'Numerical & Dynamic Modeling'},
+  {icon:'🌡', name:'EES',              cat:'Thermodynamic Cycles'},
+  {icon:'❄️', name:'HAP',              cat:'HVAC Load Analysis'},
+  {icon:'📊', name:'VBA / Excel',      cat:'Automation & Data'},
+];
+const swg = document.getElementById('sw-grid');
+software.forEach(s => {
+  const c = document.createElement('div');
+  c.className = 'sw-card';
+  c.innerHTML = `<div class="sw-icon">${s.icon}</div><div class="sw-name">${s.name}</div><div class="sw-cat">${s.cat}</div>`;
+  swg.appendChild(c);
+});
+
+const skills = [
+  {name:'CAD Modeling',          yrs:'3–4 years', pct:88, sub:'SolidWorks · AutoCAD · assemblies & drawings'},
+  {name:'FEA — Structural',      yrs:'2–3 years', pct:84, sub:'ANSYS Mechanical · mesh selection · static analysis'},
+  {name:'CFD — Thermal',         yrs:'2–3 years', pct:83, sub:'ANSYS Fluent · conjugate heat transfer'},
+  {name:'Thermodynamic Analysis',yrs:'3–4 years', pct:80, sub:'EES · cycle analysis · energy balance'},
+  {name:'HVAC & Building Load',  yrs:'1–2 years', pct:75, sub:'HAP · load calculations · system sizing'},
+  {name:'Lean Manufacturing',    yrs:'0–1 years', pct:82, sub:'Kaizen · root cause mapping · KPI tracking'},
+];
+const sg = document.getElementById('skills-grid');
+skills.forEach(s => {
+  const c = document.createElement('div');
+  c.className = 'skill-card';
+  c.innerHTML = `
+    <div class="skill-header">
+      <span class="skill-name">${s.name}</span>
+      <span class="skill-pct">${s.yrs}</span>
+    </div>
+    <div class="skill-bar"><div class="skill-fill" data-pct="${s.pct}" style="width:0%"></div></div>
+    <div class="skill-sub">${s.sub}</div>`;
+  sg.appendChild(c);
+});
+
+/* SVG THUMBNAILS */
+const svgV6 = `<svg width="210" height="145" viewBox="0 0 210 145">
+  <rect x="45" y="65" width="120" height="42" rx="5" fill="#0f1f10" stroke="#22c55e" stroke-width="1.4"/>
+  ${[0,1,2,3,4,5].map(i=>`<rect x="${53+i*18}" y="52" width="11" height="19" rx="3" fill="#0b1a0c" stroke="#22c55e" stroke-width="1.1"/>
+  <ellipse cx="${58+i*18}" cy="50" rx="4.5" ry="3.5" fill="#22c55e" opacity=".75"/>`).join('')}
+  <rect x="40" y="107" width="130" height="8" rx="4" fill="#0b1a0c" stroke="#22c55e" stroke-width="1"/>
+  <line x1="45" y1="86" x2="165" y2="86" stroke="#22c55e" stroke-width=".5" stroke-dasharray="4" opacity=".4"/>
+  <text x="105" y="130" fill="#22c55e" font-size="8" text-anchor="middle" opacity=".7">V6 Engine — SolidWorks Assembly</text>
+</svg>`;
+
+const svgBracket = `<svg width="210" height="145" viewBox="0 0 210 145">
+  <defs>
+    <linearGradient id="vm" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="35%" stop-color="#22c55e"/>
+      <stop offset="65%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+  </defs>
+  <rect x="12" y="42" width="190" height="58" rx="4" fill="url(#vm)" opacity=".82"/>
+  <rect x="12" y="42" width="28" height="58" fill="#3b82f6" rx="4"/>
+  <line x1="12" y1="22" x2="12" y2="112" stroke="#64748b" stroke-width="5" stroke-linecap="round"/>
+  <text x="105" y="130" fill="#94a3b8" font-size="8" text-anchor="middle">Von Mises stress — Bracket FEA</text>
+  <text x="13"  y="38" fill="#3b82f6" font-size="7.5">0 Pa</text>
+  <text x="160" y="38" fill="#ef4444" font-size="7.5">2.09e9 Pa</text>
+</svg>`;
+
+const svgSolar = `<svg width="210" height="145" viewBox="0 0 210 145">
+  <defs>
+    <radialGradient id="h1" cx="50%" cy="60%" r="50%">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity=".6"/>
+    </radialGradient>
+    <clipPath id="c1"><polygon points="8,108 45,28 82,108"/></clipPath>
+    <clipPath id="c2"><polygon points="90,108 107,42 124,82 141,42 158,108"/></clipPath>
+    <clipPath id="c3"><polygon points="166,108 188,20 210,108"/></clipPath>
+  </defs>
+  <polygon points="8,108 45,28 82,108" fill="url(#h1)" opacity=".85"/>
+  <polygon points="8,108 45,28 82,108" fill="none" stroke="#f97316" stroke-width="1.3"/>
+  <polygon points="90,108 107,42 124,82 141,42 158,108" fill="none" stroke="#f97316" stroke-width="1.3"/>
+  <polygon points="166,108 188,20 210,108" fill="url(#h1)" opacity=".85"/>
+  <polygon points="166,108 188,20 210,108" fill="none" stroke="#f97316" stroke-width="1.3"/>
+  <text x="45"  y="120" fill="#f97316" font-size="7" text-anchor="middle">Pyramid</text>
+  <text x="124" y="120" fill="#f97316" font-size="7" text-anchor="middle">V-shape</text>
+  <text x="188" y="120" fill="#f97316" font-size="7" text-anchor="middle">Chimney</text>
+  <text x="105" y="134" fill="#94a3b8" font-size="7.5" text-anchor="middle">Solar Still — 3 Geometry CFD</text>
+</svg>`;
+
+const svgNozzle = `<svg width="210" height="145" viewBox="0 0 210 145">
+  <defs>
+    <linearGradient id="mach" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#3b82f6"/>
+      <stop offset="60%"  stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+  </defs>
+  <path d="M10,45 Q60,72 105,68 Q150,64 200,42 L200,103 Q150,81 105,77 Q60,73 10,100Z" fill="url(#mach)" opacity=".55"/>
+  <path d="M10,45 Q60,72 105,68 Q150,64 200,42" fill="none" stroke="#38bdf8" stroke-width="1.2"/>
+  <path d="M10,100 Q60,73 105,77 Q150,81 200,103" fill="none" stroke="#38bdf8" stroke-width="1.2"/>
+  <line x1="105" y1="60" x2="105" y2="85" stroke="#fff" stroke-width="1" stroke-dasharray="3" opacity=".5"/>
+  <text x="107" y="57" fill="#fff" font-size="7" opacity=".7">throat</text>
+  <text x="18"  y="75" fill="#3b82f6" font-size="8">M&lt;1</text>
+  <text x="168" y="75" fill="#ef4444" font-size="8">M&gt;1</text>
+  <text x="105" y="132" fill="#94a3b8" font-size="8" text-anchor="middle">C-D Nozzle — Mach distribution</text>
+</svg>`;
+
+const svgSysDyn = `<svg width="210" height="145" viewBox="0 0 210 145">
+  <rect x="5" y="55" width="15" height="45" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2"/>
+  ${[0,1,2,3,4,5,6].map(i=>`<line x1="${20+i*7}" y1="${i%2===0?65:80}" x2="${27+i*7}" y2="${i%2===0?80:65}" stroke="#38bdf8" stroke-width="1.2"/>`).join('')}
+  <line x1="20" y1="88" x2="55" y2="88" stroke="#f97316" stroke-width="1.2"/>
+  <rect x="55" y="84" width="20" height="8" fill="none" stroke="#f97316" stroke-width="1.2"/>
+  <line x1="75" y1="88" x2="90" y2="88" stroke="#f97316" stroke-width="1.2"/>
+  <rect x="69" y="58" width="38" height="30" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1.4"/>
+  <text x="88" y="77" fill="#38bdf8" font-size="9" text-anchor="middle">m</text>
+  <polyline points="115,110 130,55 145,100 160,72 175,90 190,80 205,83" fill="none" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="105" y="140" fill="#94a3b8" font-size="8" text-anchor="middle">Mass-spring-damper system</text>
+</svg>`;
+
+const svgSolarCol = `<svg width="210" height="145" viewBox="0 0 210 145">
+  <circle cx="105" cy="30" r="14" fill="#fbbf24" opacity=".85"/>
+  ${Array.from({length:8},(_,i)=>{const a=i*45*Math.PI/180;return`<line x1="${105+16*Math.cos(a)}" y1="${30+16*Math.sin(a)}" x2="${105+24*Math.cos(a)}" y2="${30+24*Math.sin(a)}" stroke="#fbbf24" stroke-width="1.5" opacity=".7"/>`;}).join('')}
+  <line x1="98"  y1="44" x2="60"  y2="78" stroke="#fbbf24" stroke-width=".8" stroke-dasharray="3" opacity=".6"/>
+  <line x1="105" y1="45" x2="105" y2="78" stroke="#fbbf24" stroke-width=".8" stroke-dasharray="3" opacity=".6"/>
+  <line x1="112" y1="44" x2="150" y2="78" stroke="#fbbf24" stroke-width=".8" stroke-dasharray="3" opacity=".6"/>
+  <rect x="45" y="78" width="120" height="18" rx="3" fill="#1e3a5f" stroke="#38bdf8" stroke-width="1.3"/>
+  <rect x="45" y="78" width="120" height="6"  rx="3" fill="#38bdf840"/>
+  <path d="M45,114 Q75,106 105,110 Q135,114 165,106" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="105" y="132" fill="#94a3b8" font-size="8" text-anchor="middle">Flat-plate solar collector — EES</text>
+</svg>`;
+
+/* PROJECTS DATA */
+const projects = [
+  {
+    title: 'Solar Still CFD — 3 Geometries',
+    tags: [{l:'CFD',c:'orange'},{l:'ANSYS Fluent',c:'orange'},{l:'Graduation Project',c:'orange'}],
+    desc: 'Compared heat transfer performance across Pyramid, V-shape, and Chimney solar still geometries using conjugate heat transfer CFD. Evaluated Nu, entropy generation, and a Pugh matrix to select the optimal manufacturable design.',
+    result: 'V-shape L=0.3 selected — GPI 0.560 at Ra=10⁶ · 15.2 kg/m²/day baseline · Riyadh summer/winter validated',
+    judgment: 'The Chimney geometry showed the strongest visual thermal plume — and turned out to have the lowest Nusselt numbers of all three. The narrow apex created flow resistance that cancelled the convective advantage. The thermally best design (V-shape L=0.2) was also rejected — it scored too low on manufacturability in the Pugh matrix. The selected design was the best engineering answer, not the best simulation number.',
+    svg: svgSolar, imgs: IMAGES.sol, coming: false, featured: true,
+    link: 'GP.HTML' // ← replace with your graduation project site URL
+  },
+  {
+    title: 'V6 Engine — CAD Assembly',
+    tags: [{l:'CAD',c:'green'},{l:'SolidWorks',c:'green'},{l:'20 Components',c:'green'}],
+    desc: 'Full V6 engine assembly in SolidWorks with 20 components — pistons, crankshaft, connecting rods, cylinder head, camshaft, and valve train. Fully constrained motion mates and complete engineering drawings produced.',
+    result: '20-part assembly · fully constrained mates · exploded view & BOM',
+    judgment: 'Chose concentric and coincident mates over rigid groups to preserve realistic relative motion between crank, rod, and piston — allowing the assembly to simulate the actual kinematic chain rather than just look correct statically.',
+    svg: svgV6, imgs: IMAGES.eng, coming: false
+  },
+  {
+    title: 'Bracket Structural FEA',
+    tags: [{l:'FEA',c:'blue'},{l:'ANSYS Mechanical',c:'blue'},{l:'Hex20 Mesh',c:'blue'}],
+    desc: 'Static structural FEA on a mounting bracket using high-quality Hex20 mesh. Identified stress concentrations around bolt holes, analyzed von Mises stress distribution and safety factor contours across the component.',
+    result: 'Avg stress: 5.56 GPa · Avg safety factor: 1.5 · Critical zone: bolt hole edges',
+    judgment: 'Chose Hex20 elements over tetrahedral mesh because stress gradients near bolt holes require element faces aligned with the load path — tetrahedral elements would introduce artificial stiffness and overestimate peak stress at the critical zones.',
+    svg: svgBracket, imgs: IMAGES.fea, coming: false
+  },
+  {
+    title: 'C-D Nozzle — Gas Dynamics',
+    tags: [{l:'Gas Dynamics',c:'blue'},{l:'MATLAB',c:'blue'},{l:'Isentropic Flow',c:'blue'}],
+    desc: 'Analyzed isentropic flow through a converging-diverging nozzle across subsonic and supersonic regimes. Plotted Mach number, pressure, and temperature distributions. Studied normal shock formation at varying back pressures.',
+    result: 'Mach profile validated · shock location within 2% of analytical · choked flow confirmed',
+    judgment: 'Studied three distinct back-pressure cases deliberately — choked flow alone only tells you the throat condition. Where the shock forms in the diverging section is what determines diffuser efficiency and whether the nozzle is operating in the intended regime.',
+    svg: svgNozzle, imgs: IMAGES.nozzle, coming: false
+  },
+  {
+    title: 'Mass-Spring-Damper — System Dynamics',
+    tags: [{l:'System Dynamics',c:'blue'},{l:'MATLAB',c:'blue'},{l:'Modeling',c:'blue'}],
+    desc: 'Dynamic model of a mass-spring-damper system studying transient response to step and impulse inputs. Derived equations of motion, solved numerically in MATLAB, and compared underdamped, critically damped, and overdamped cases.',
+    result: 'All damping regimes modeled · natural frequency identified · Simulink block validated',
+    judgment: 'Ran all three damping regimes in the same model rather than tuning for one — the point was to understand how the damping ratio shifts system behavior, not just confirm that one configuration settles. Critically damped is rarely optimal in practice; the comparison showed why.',
+    svg: svgSysDyn, imgs: IMAGES.sysdyn, coming: false
+  },
+  {
+    title: 'Flat-Plate Solar Collector — Thermal Model',
+    tags: [{l:'Solar Energy',c:'orange'},{l:'EES',c:'orange'},{l:'Thermal',c:'orange'}],
+    desc: 'Thermodynamic performance analysis of a flat-plate solar collector using EES. Modeled useful heat gain, thermal efficiency, and outlet temperature as a function of solar irradiance and mass flow rate.',
+    result: 'Efficiency curve generated · optimal flow rate identified · FR·UL product calculated',
+    judgment: 'Varied mass flow rate parametrically rather than fixing it — the efficiency curve is only meaningful when you understand where the knee is. Below optimal flow, outlet temperature rises but useful gain drops. The FR·UL product quantifies exactly that tradeoff.',
+    svg: svgSolarCol, imgs: IMAGES.solcol, coming: false
+  },
+];
+
+/* RENDER PROJECTS */
+const pg = document.getElementById('projects-grid');
+projects.forEach(p => {
+  if (p.coming) return;
+  const c = document.createElement('div');
+  c.className = 'proj-card' + (p.featured ? ' featured' : '');
+  const tags = p.tags.map(t => `<span class="proj-tag ${t.c}">${t.l}</span>`).join('');
+  const linkBtn = p.link
+    ? `<a href="${p.link}" target="_blank" class="proj-link" onclick="event.stopPropagation()">View full case study →</a>`
+    : '';
+  c.innerHTML = `
+    <div class="proj-visual">
+      ${p.svg}
+      ${!p.link ? '<span class="click-hint">click to view images</span>' : ''}
+    </div>
+    <div class="proj-body">
+      <div class="proj-tags">${tags}</div>
+      <div class="proj-title">${p.title}</div>
+      <div class="proj-desc">${p.desc}</div>
+      <div class="proj-result">Key result: ${p.result}</div>
+      <div class="proj-judgment"><div class="proj-judgment-label">JUDGMENT CALL</div>${p.judgment}</div>
+      ${linkBtn}
+    </div>`;
+  if (!p.link) {
+    c.addEventListener('click', () => openLightbox(p));
+  }
+  pg.appendChild(c);
+});
+
+/* MORE WORK GALLERY */
+const galleryItems = [
+  {src:'gearbox1.jpg',    label:'Two-stage gearbox — SolidWorks'},
+  {src:'gearbox2.jpg',    label:'Gearbox assembly drawing'},
+  {src:'hand1.jpg',       label:'Prosthetic hand — articulated'},
+  {src:'hand2.jpg',       label:'Prosthetic hand — engineering drawing'},
+  {src:'additional1.jpg', label:'CAD model'},
+  {src:'additional2.jpg', label:'CAD model'},
+  {src:'additional3.jpg', label:'FEA result'},
+  {src:'additional4.jpg', label:'FEA result'},
+  {src:'additional5.jpg', label:'SolidWorks model'},
+  {src:'shaft_fea.jpg',   label:'Shaft — max shear stress FEA'},
+];
+const gg = document.getElementById('gallery-grid');
+galleryItems.forEach(item => {
+  const div = document.createElement('div');
+  div.className = 'gallery-item';
+  div.innerHTML = `<img src="${item.src}" alt="${item.label}" onerror="this.parentElement.style.display='none'"/>
+    <div class="gallery-label">${item.label}</div>`;
+  div.addEventListener('click', () => {
+    document.getElementById('lb-title').textContent = item.label;
+    const content = document.getElementById('lb-content');
+    content.innerHTML = `<img src="${item.src}" alt="${item.label}" class="lb-main-img"/>`;
+    document.getElementById('lightbox').classList.add('open');
+  });
+  gg.appendChild(div);
+});
+
+/* LIGHTBOX */
+function openLightbox(p) {
+  document.getElementById('lb-title').textContent = p.title;
+  const content = document.getElementById('lb-content');
+  content.innerHTML = '';
+  if (!p.imgs || p.imgs.length === 0) {
+    content.innerHTML = `<div class="lb-no-img">No images linked yet for this project.<br/>
+    Open index.html, find the <strong>IMAGES</strong> object at the top of the script,
+    and replace the placeholder filenames with your actual image filenames.</div>`;
+  } else {
+    const main = document.createElement('img');
+    main.className = 'lb-main-img';
+    main.src = p.imgs[0];
+    main.alt = p.title;
+    content.appendChild(main);
+    if (p.imgs.length > 1) {
+      const thumbRow = document.createElement('div');
+      thumbRow.className = 'lb-thumbs';
+      p.imgs.forEach((src, i) => {
+        const t = document.createElement('img');
+        t.className = 'lb-thumb' + (i === 0 ? ' active' : '');
+        t.src = src; t.alt = 'thumb';
+        t.addEventListener('click', () => {
+          main.src = src;
+          thumbRow.querySelectorAll('.lb-thumb').forEach(x => x.classList.remove('active'));
+          t.classList.add('active');
+        });
+        thumbRow.appendChild(t);
+      });
+      content.appendChild(thumbRow);
+    }
+  }
+  document.getElementById('lightbox').classList.add('open');
+}
+
+document.getElementById('lb-close').addEventListener('click', () =>
+  document.getElementById('lightbox').classList.remove('open'));
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('lightbox'))
+    document.getElementById('lightbox').classList.remove('open');
+});
+
+/* MOBILE MENU */
+function closeMobileMenu(){
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobile-menu').classList.remove('open');
+}
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobile-menu').classList.toggle('open');
+});
+
+/* SKILL BARS */
+setTimeout(() => {
+  document.querySelectorAll('.skill-fill').forEach(el => {
+    el.style.width = el.dataset.pct + '%';
+  });
+}, 300);
+</script>
+</body>
+</html>
