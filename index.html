@@ -620,6 +620,7 @@ function openLightbox(p) {
   content.innerHTML = '';
   if (!p.imgs || p.imgs.length === 0) {
     content.innerHTML = `<div class="lb-no-img">No images linked yet for this project.<br/>;
+     .</div>`;
   } else {
     const main = document.createElement('img');
     main.className = 'lb-main-img';
